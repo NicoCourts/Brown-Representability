@@ -24,6 +24,7 @@
 % Document-Specific Macros
 \newcommand*{\dgVectk}{\mathbf{dgVect}_k}
 \newcommand*{\dgmodA}{\mathbf{dgmod}\text{-}A}
+\newcommand*{\pTopc}{\mathbf{Top}_\ast^c}
 
 \begin{document}
 %make the title page
@@ -36,9 +37,12 @@
 \begin{abstract}
   In this document we write an exposition presenting the topic of Brown representability and how it has appeared in different contexts -- beginning first with some necessary preliminaries followed by a more topological perspective and culminating in a modern and categorical statement holds in triangulated categories.
 \end{abstract}
+\tableofcontents
 
-\section{Some Background and Motivation}
-In this section we begin with some preliminary definitions and theorems that serve as the machinery for Brown representability. The results that follow are fairly standard and the interested reader can find more information in \cite{neeman-book} and \cite{riehl}.
+\section{Some Background}
+In this section we begin with some preliminary definitions and theorems that serve as the machinery for Brown representability. 
+The results that follow are fairly standard and the interested reader can find more information in \cite{neeman-book} and \cite{riehl}.
+For the sake of time, we will omit a discussion of these facts in our lecture but include them in this document in case someone is interested in them.
 \subsection{General Category Theory}
 \begin{defn}
   A \textbf{category} $\calC$ is a collection of \textbf{objects} along with, for every pair $(X,Y)$ of objects in $\calC$, a collection $\Hom_\calC(X,Y)$ of \textbf{morphisms} from $X$ to $Y$ such that
@@ -50,6 +54,36 @@ In this section we begin with some preliminary definitions and theorems that ser
   \end{itemize}
 \end{defn}
 \begin{defn}
+	The \textbf{opposite category} $\calC^{op}$ of a category $\calC$ is the category whose objects are 
+	precisely those of $\calC$ and whose morphisms are as follows: for every $A,B\in\calC$ and $f\in\Hom_\calC(A,B)$,
+	there is a map $f^\ast\in\Hom_{\calC^{op}}(B,A)$ such that for all composable $f$ and $g$ in $\calC$,
+	\[(f\circ g)^\ast=g^\ast\circ f^\ast.\]
+\end{defn}
+
+\subsection{Size Considerations}
+``Size'' is often an issue when you are discussing category theory in that one can quickly get into trouble with Russell's paradox.
+To ameliorate this to some degree, it is often wise to restrict oneself to the categories which are suitably small (although often 
+ideas can be extended with extra care to a more general setting).
+
+Here we define some of the types of smallness that we are interested in. The general idea to keep in mind is that if $X$ is small, then the 
+collections associated to $X$ are sets.
+
+\begin{defn}
+	A category $\calC$ is called \textbf{locally small} if for each $A,B\in\calC$, $\Hom_{\calC}(A,B)$ is a set.
+\end{defn}
+\begin{defn}
+	A category $\calC$ is called \textbf{small} if it is locally small and, in addition, has a set's worth of objects.
+\end{defn}
+\begin{defn}
+	A \textbf{small (co)limit} (see \cite{riehl} for definition of (co)limits) is a limit of a diagram that is indexed by a small indexing category.
+\end{defn}
+\begin{rmk}
+	Since (co)products are (co)limits, this also gives us a definition for \textbf{small (co)products}. We can also just say 
+	they are (co)products indexed by a set.
+\end{rmk}
+
+\subsection{Functors and Representability}
+\begin{defn}
   A (covariant) \textbf{functor} between two categories $\calC$ and $\calD$ is a map $F:\calC\to\calD$ that maps objects and morphisms in $\calC$ to those in $\calD$, respectively, such that 
   \begin{itemize}
     \item For each $X\in\calC$, we have $F(\id_X)=\id_{F(X)}$
@@ -57,13 +91,54 @@ In this section we begin with some preliminary definitions and theorems that ser
     \item For all $X,Y,Z$ in $\calC$ and $f\in\Hom_\calC(X,Y)$ and $g\in\Hom_\calC(Y,Z)$,
     \[F(g\circ f)=F(g)\circ F(f)\]
   \end{itemize}
+\end{defn}
+\begin{rmk}
+	Leveraging duality, one can define a \textbf{contravariant functor} $F:\calC\to \calD$ as a covariant functor $F:\calC^{op}\to \calD$.
+\end{rmk}
+\begin{defn}
+	An \textbf{equivalence of categories} $F:\calC\to\calD$ is a functor such that 
+	\begin{itemize}
+		\item $F$ is both \textbf{full} (injective on $\Hom$s) and \textbf{faithful} (surjective on $\Hom$s); and 
+		\item $F$ is \textbf{essentially surjective} -- for each $D\in\calD$, there is a $D'\in\calD$ such that 
+		$D\cong D'$ and, for some $C\in\calC$, we have $F(C)=D'$.
+	\end{itemize}
+	An \textbf{auto-equivalence} for $\calC$ is an equivalence of categories from $\calC$ to itself.
+\end{defn}
+\begin{defn}\label{def-rep-func}
+	Let $F:\calC\to \mathbf{Set}$ be a functor. Then $F$ is called \textbf{representable} if there exists an object $A\in \calC$ such that
+	$F$ is naturally isomorphic to $\Hom_{\calC}(-,A)$.
+\end{defn}
+\begin{defn}\label{def-cohom-func}
+	Let $R$ be a ring and let $\calT$ be a triangulated category. Then a functor $F:\calT\to\Rmod$ is called \textbf{cohomological}
+	if $F$ sends each triangle $A\to B\to C\to\Sigma A$ to an exact sequence in $\Rmod$.
+\end{defn}
+\begin{rmk}
+	This definition extends to functors from triangulated categories to any Abelian category, but due to the Freyd-Mitchell
+	embedding it suffices to use $\Rmod$ for all small examples.
+\end{rmk}
 
+\subsection{Natural Transformations}
+A natural transformation is a ``map between maps'' that demonstrates some kind of nice compatibility between two functors.
+Often, when one says a property is ``natural'' what one actually means is that there is a natural transformation involved.
+
+\begin{defn}
+	Let $F,G:\calC\to\calD$ be two functors. Then $\eta:F\to G$, defined to be a collection of \textbf{component maps} $\{\eta_\alpha:F(\alpha)\to G(\alpha)\}_{\alpha\in\calC}$, 
+	is called a \textbf{natural transformation} if, for every 
+	$A,B\in\calC$ and $f\in\Hom_{\calC}(A,B)$, the following square (called a \textbf{naturality square}) commutes:
+	\begin{center}
+		\begin{tikzcd}
+			F(A)\ar[d,"F(f)"]\ar[r,"\eta_A"] & G(A)\ar[d,"G(f)"]\\
+			F(B)\ar[r,"\eta_B"] & G(B)
+		\end{tikzcd}
+	\end{center}
+	If $\eta$ has an inverse, then it is called a \textbf{natural isomorphism.}
 \end{defn}
 
+\subsection{Generators in Category Theory}
 
 \subsection{Triangulated Categories}
-The primary context that we are interested is a class of categories called \textit{triangulated categores.} Examples of 
-these include $H^0(\Ch(\modR))$, the homotopy category of chain complexes of $R$-modules (modulo chain homotopy) and $\D(\modR)$,
+The primary context that we are interested is a class of categories called \textit{triangulated categories.} Examples of 
+these include $\K(\modR)$, the homotopy category of chain complexes of $R$-modules (modulo chain homotopy) and $\D(\modR)$,
 the derived category in which we (Verdier) localize the previous category at quasi-isomorphisms.
 \begin{defn}
 	Let $\calC$ be a category with auto-equivalence $\Sigma:\calC\to\calC$. A \textbf{triangle} in $\calC$ is a diagram in $\calC$:
@@ -85,7 +160,7 @@ the derived category in which we (Verdier) localize the previous category at qua
 
 \begin{defn}
 	The \textbf{rotation} of a triangle $X\xrightarrow{u} Y\to Z\to \Sigma X$ is $Y\to Z\to \Sigma X\xrightarrow{-\Sigma u}\Sigma Y.$
-	We use the notation $\mathscr R(\Delta)$ for the rotation of $\Delta$.
+	We use the notation $\mathscr R(\Delta)$ for the rotation of $\Delta$ and $\scrR^{-1}$ for the inverse rotation.
 \end{defn}
 
 \begin{defn}
@@ -95,7 +170,7 @@ the derived category in which we (Verdier) localize the previous category at qua
 	Then $({\calC}, \Sigma ,D)$ is \textbf{pre-triangulated} category where $D$ is a full, nonempty subcategory $D\subseteq\Delta(\cal C)$
 	with shift functor $\Sigma$ of $D$ and we have the following axioms:
 	\begin{itemize}
-		\item (\textbf{TR0}) $X\xrightarrow{\id} X\to 0$ is in $D$ for each $X\in \cal C$ and furthermore $D$ is closed under both shifts and triangle isomorphisms.
+		\item (\textbf{TR0}) $0\to X\xrightarrow{\id} X\to 0$ is in $D$ for each $X\in \cal C$ and furthermore $D$ is closed under both shifts and triangle isomorphisms.
 		\item (\textbf{TR1}) [\textit{Mapping Cone Axiom}] For any $f:X\to Y$ in $\cal C$, there is a triangle
 		\[X\xrightarrow{f} Y\to Z\to\Sigma X\]
 		\item (\textbf{TR2}) [\textit{Rotation Axiom}] If $F\in D$, then $\mathscr R(F),\mathscr R^{-1}(F)\in D$
@@ -109,6 +184,10 @@ the derived category in which we (Verdier) localize the previous category at qua
 		with maps $f$ and $g$, there exists an $h:Z\to Z'$ such that the above diagram commutes.
 	\end{itemize}
 \end{defn}
+\begin{rmk}
+	The name ``mapping cone axiom'' in (\textbf{TR2}) above comes from the fact that in $\K(\modR)$, or in fact in 
+	any additive category with suspension, $Z$ can be constructed as $\cone(f)$, the mapping cone of $f$. 
+\end{rmk}
 \begin{defn}
 	A triple $(\calC,\Sigma, D)$ is a \textbf{triangulated category} if it is pre-triangulated and, in addition,
 	satisfies the axiom (\textbf{TR4}) (Verdier/octahedral axiom):
@@ -143,16 +222,72 @@ There are two other representations of the octahedral axiom that are sometimes m
 	\end{tikzcd}
 \end{center}
 \end{rmk}
+
+We often want that our triangulated category $\calT$ is slightly more controlled. For this, we introduce another 
+condition:
 \begin{defn}
   If $\calT$ is a triangulated category that is closed under small coproducts, then it is said to satisfy (\textbf{TR5}). If $\calT^{op}$ satisfies (\textbf{TR5}) (or equivalently $\calT$ is closed under small products), then we say $\calT$ satisfies (\textbf{TR5}*).
 \end{defn}
 
-
-
-
 \section{Brown Representability for Simpilicial Complexes}
+One of the first incarnations of Brown representability comes from topology (as these things often do). First we need to single out 
+the appropriate context.
+
+\subsection{Homotopy Theory}
+\begin{defn}
+	Let $\pTopc$ denote the category of connected pointed topological spaces. That is, the objects are pairs $(X,p)$ where $X$ is a connected 
+	topological space and $p$ is a point in $X$. The maps are continuous maps that send the distinguished point of one pair to the distinguished point in the other.
+\end{defn}
+\begin{defn}
+	$\text{Ho}(\pTopc)$ is the \textbf{homotopy category of connected topological spaces.} The objects are the same as in $\pTopc$, 
+	but maps are localized at the weak homotopy equivalences.
+\end{defn}
+\begin{rmk}
+	In essence, $\text{Ho}(\pTopc)$ consists of weak homotopy equivalence classes (recall that two objects are weak homotopy equivalent if they have the same 
+	homotopy groups).
+\end{rmk}
+\begin{rmk}
+	This is a form of \textit{localization of categories} that is outside the scope of this paper, but closely mirrors the idea 
+	we see in commutative algebra.
+\end{rmk}
+\begin{defn}
+	A \textbf{weak pushout} of a diagram $X\xleftarrow{f}Y\xrightarrow{g}Z$ is an object $W$ and maps 
+	$f':X\to W$ and $g':Z\to W$ such that for any object $O$ and maps $\alpha:X\to O$ and $\beta:Z\to O$, 
+	such that $\alpha\circ f=\beta\circ g$, there exists a map $\gamma:W\to O$ such that the following diagram commutes:
+	\begin{center}
+		\begin{tikzcd}
+			Y\ar[r,"f"]\ar[d,"g"] & X\ar[d,"f'"]\ar[ddr,"\alpha",bend left] &\\
+			Z\ar[r,"g'"]\ar[rrd,"\beta",bend right] & W\ar[dr,dashed,"\gamma"] & \\
+			& & O 
+		\end{tikzcd}
+	\end{center}
+
+	A \textbf{weak pullback} is defined dually.
+\end{defn}
+\begin{rmk}
+	The ``weakness'' referred to in this definition is due to the fact that the map $\gamma$ exists, but is not 
+	required to be unique (unlike the regular pullback and pushout).
+\end{rmk}
+
+\subsection{The Statement}
+\begin{thm}[Brown-Adams]
+	A contravariant functor $F:\text{Ho}(\pTopc)\to\mathbf{Set}_\ast$ is representable precisely if 
+	\begin{itemize}
+		\item $F$ takes coproducts to products; and 
+		\item $F$ takes weak pushouts to weak pullbacks.
+	\end{itemize}
+\end{thm}
 
 \section{Brown Representability for Triangulated Categories}
+Finally we come to the full-powered version of the Brown Representability due to Neeman in \cite{neeman-article}:
+\begin{thm}[Brown]
+	Let $\calT$ be a compactly generated triangulated category. For a functor $H:\calT^{op}\to\Ab$, the following 
+	are equivalent:
+	\begin{itemize}
+		\item The functor $H$ is cohomological (def~\ref{def-cohom-func}) and preserves small coproducts.
+		\item $H$ is representable (def~\ref{def-rep-func}).
+	\end{itemize}
+\end{thm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Bibliography %%%%%%%%%%%%%
