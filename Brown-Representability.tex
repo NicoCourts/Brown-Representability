@@ -39,6 +39,32 @@
 \end{abstract}
 \tableofcontents
 
+\newpage
+\section{Outline of Presentation}
+The presentation will demonstrate some proper subset of the information in this document. The current sketch is the following:
+\begin{itemize}
+	\item Introduction and preliminaries
+	\begin{itemize}
+		\item Background we are assuming (categories, functors, natural transformations, and limits)
+		\item What is representability and why is it useful/important?
+		\item (Co)homological functors
+	\end{itemize}
+	\item Brown Representability in Simplicial/CW Complexes
+	\begin{itemize}
+		\item The homotopy category of pointed connected topological spaces
+		\item Categorical notions (e.g. weak pushouts)
+		\item Statement of theorem
+		\item Application
+	\end{itemize}
+	\item Brown Representability in Triangulated Categories
+	\begin{itemize}
+		\item Why are triangulated categories what we want?
+		\item Definiton and categorical background (e.g. compact generation)
+		\item Statement of theorem
+		\item Applications
+	\end{itemize}
+\end{itemize}
+
 \section{Some Background}
 In this section we begin with some preliminary definitions and theorems that serve as the machinery for Brown representability. 
 The results that follow are fairly standard and the interested reader can find more information in \cite{neeman-book} and \cite{riehl}.
@@ -236,7 +262,7 @@ the appropriate context.
 \subsection{Homotopy Theory}
 \begin{defn}
 	Let $\pTopc$ denote the category of connected pointed topological spaces. That is, the objects are pairs $(X,p)$ where $X$ is a connected 
-	topological space and $p$ is a point in $X$. The maps are continuous maps that send the distinguished point of one pair to the distinguished point in the other.
+	topological space and $p$ is a distinguished point in $X$. The maps are continuous maps that send the distinguished point of one pair to the distinguished point in the other.
 \end{defn}
 \begin{defn}
 	$\text{Ho}(\pTopc)$ is the \textbf{homotopy category of connected topological spaces.} The objects are the same as in $\pTopc$, 
