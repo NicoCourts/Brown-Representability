@@ -16,7 +16,7 @@
 \setlength{\headsep}{24pt}  % space between header and text
 \pagestyle{fancy}     % set pagestyle for document
 \lhead{Brown Representability} % put text in header (left side)
-\rhead{Cheng \& Courts} % put text in header (right side)
+\rhead{Courts} % put text in header (right side)
 \cfoot{\itshape p. \thepage}
 \setlength{\headheight}{15pt}
 \allowdisplaybreaks
@@ -29,7 +29,7 @@
 \begin{document}
 %make the title page
 \title{Brown Representability\vspace{-1ex}}
-\author{Everett Cheng and Nico Courts}
+\author{Nico Courts}
 \date{Math 509 -- Spring 2019}
 \maketitle
 
@@ -67,7 +67,7 @@ The presentation will demonstrate some proper subset of the information in this 
 
 \section{Some Background}
 In this section we begin with some preliminary definitions and theorems that serve as the machinery for Brown representability. 
-The results that follow are fairly standard and the interested reader can find more information in \cite{neeman-book} and \cite{riehl}.
+The results that follow are fairly standard and the interested reader can find more information in \cite{neeman-book} and \cite{riehl16}.
 For the sake of time, we will omit a discussion of these facts in our lecture but include them in this document in case someone is interested in them.
 \subsection{General Category Theory}
 \begin{defn}
@@ -296,6 +296,7 @@ the appropriate context.
 \end{rmk}
 
 \subsection{The Statement}
+The following result was proven by Brown and presented in \cite{brown65} and further generalized in \cite{adams71}.
 \begin{thm}[Brown-Adams]
 	A contravariant functor $F:\text{Ho}(\pTopc)\to\mathbf{Set}_\ast$ is representable precisely if 
 	\begin{itemize}
@@ -304,7 +305,11 @@ the appropriate context.
 	\end{itemize}
 \end{thm}
 
+\subsection{Application}
+The following is a 
+
 \section{Brown Representability for Triangulated Categories}
+\subsection{The Statement}
 Finally we come to the full-powered version of the Brown Representability due to Neeman in \cite{neeman-article}:
 \begin{thm}[Brown]
 	Let $\calT$ be a compactly generated triangulated category. For a functor $H:\calT^{op}\to\Ab$, the following 
