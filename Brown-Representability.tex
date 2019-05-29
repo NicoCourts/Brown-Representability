@@ -25,6 +25,10 @@
 \newcommand*{\dgVectk}{\mathbf{dgVect}_k}
 \newcommand*{\dgmodA}{\mathbf{dgmod}\text{-}A}
 \newcommand*{\pTopc}{\mathbf{Top}_\ast^c}
+\newcommand*{\Set}{\mathbf{Set}}
+\newcommand*{\Func}{\mathbf{Func}}
+\newcommand*{\pCW}{\mathbf{Top}^{CW}_\ast}
+\newcommand*{\relCW}{\mathbf{Top}^{CW}_{\hookrightarrow}}
 
 \begin{document}
 %make the title page
@@ -101,7 +105,7 @@ collections associated to $X$ are sets.
 	A category $\calC$ is called \textbf{small} if it is locally small and, in addition, has a set's worth of objects.
 \end{defn}
 \begin{defn}
-	A \textbf{small (co)limit} (see \cite{riehl} for definition of (co)limits) is a limit of a diagram that is indexed by a small indexing category.
+	A \textbf{small (co)limit} (see \cite{riehl16} for definition of (co)limits) is a limit of a diagram that is indexed by a small indexing category.
 \end{defn}
 \begin{rmk}
 	Since (co)products are (co)limits, this also gives us a definition for \textbf{small (co)products}. We can also just say 
@@ -130,18 +134,7 @@ collections associated to $X$ are sets.
 	\end{itemize}
 	An \textbf{auto-equivalence} for $\calC$ is an equivalence of categories from $\calC$ to itself.
 \end{defn}
-\begin{defn}\label{def-rep-func}
-	Let $F:\calC\to \mathbf{Set}$ be a functor. Then $F$ is called \textbf{representable} if there exists an object $A\in \calC$ such that
-	$F$ is naturally isomorphic to $\Hom_{\calC}(-,A)$.
-\end{defn}
-\begin{defn}\label{def-cohom-func}
-	Let $R$ be a ring and let $\calT$ be a triangulated category. Then a functor $F:\calT\to\Rmod$ is called \textbf{cohomological}
-	if $F$ sends each triangle $A\to B\to C\to\Sigma A$ to an exact sequence in $\Rmod$.
-\end{defn}
-\begin{rmk}
-	This definition extends to functors from triangulated categories to any Abelian category, but due to the Freyd-Mitchell
-	embedding it suffices to use $\Rmod$ for all small examples.
-\end{rmk}
+
 
 \subsection{Natural Transformations}
 A natural transformation is a ``map between maps'' that demonstrates some kind of nice compatibility between two functors.
@@ -159,8 +152,6 @@ Often, when one says a property is ``natural'' what one actually means is that t
 	\end{center}
 	If $\eta$ has an inverse, then it is called a \textbf{natural isomorphism.}
 \end{defn}
-
-\subsection{Generators in Category Theory}
 
 \subsection{Triangulated Categories}
 The primary context that we are interested is a class of categories called \textit{triangulated categories.} Examples of 
@@ -259,14 +250,14 @@ condition:
 One of the first incarnations of Brown representability comes from topology (as these things often do). First we need to single out 
 the appropriate context.
 
-\subsection{Homotopy Theory}
+\subsection{Category of Interest}
 \begin{defn}
 	Let $\pTopc$ denote the category of connected pointed topological spaces. That is, the objects are pairs $(X,p)$ where $X$ is a connected 
 	topological space and $p$ is a distinguished point in $X$. The maps are continuous maps that send the distinguished point of one pair to the distinguished point in the other.
 \end{defn}
 \begin{defn}
 	$\text{Ho}(\pTopc)$ is the \textbf{homotopy category of connected topological spaces.} The objects are the same as in $\pTopc$, 
-	but maps are localized at the weak homotopy equivalences.
+	but maps are \textit{weak homotopy equivalence classes} (relative to the basepoint) of maps of pointed spaces.
 \end{defn}
 \begin{rmk}
 	In essence, $\text{Ho}(\pTopc)$ consists of weak homotopy equivalence classes (recall that two objects are weak homotopy equivalent if they have the same 
@@ -276,6 +267,72 @@ the appropriate context.
 	This is a form of \textit{localization of categories} that is outside the scope of this paper, but closely mirrors the idea 
 	we see in commutative algebra.
 \end{rmk}
+\begin{rmk}
+	Since any topological space is weakly homotopy equivalent to a CW-complex, we can easily see that 
+	$\text{Ho}(\pTopc)\simeq\text{Ho}(\mathbf{CW}_\ast)$, the homotopy category of pointed CW complexes. This gives us some nice leverage for computation and tangibility.
+\end{rmk}
+
+\subsection{Generalized (Eilenberg-Steenrod) Cohomology Theories}
+The idea here is that we can construct a general definition that generally captures what we mean when we say we are 
+working with cohomology.
+
+Notice that these theories notably do \textit{not} include nonabelian cohomology theories and other theories of interest.
+\begin{defn}
+	$\Ab^\bbZ$ is the functor category $\Func(\bbZ,\Ab)$ or, equivalently, the category of $\bbZ$-graded Abelian groups.
+\end{defn}
+\begin{rmk}
+	In case you haven't seen it before, the category $\bbZ$ we're talking about has as its objects the integers and 
+	a (unique) morphism $m\to n$ whenever $n\ge m$. This is the category we can construct from any set that admits a preorder (reflexivity and transitivity).
+
+	Functorality here says that for any $k\in\bbN$ we can consider the degree $k$ maps between the $i^{th}$ graded piece 
+	of $G$ and the $(i+k)^{th}$ graded piece of $H$ for any $G,H\in\Ab^{\bbZ}$. If $\varphi:G\to H$ is any degree zero map and $h\in H^k$ is 
+	any degree $k$ element in $H$, then an example of such a map is $\varphi'(g)=h\cdot \varphi(g).$
+\end{rmk}
+\begin{defn}[(Reduced) Generalized Cohomology Theory]\label{def-red-cohom}
+	A \textbf{reduced generalized cohomology theory} on $\calC=\pCW$ is 
+	a family of functors:
+	\[\tilde E^\bullet:\text{Ho}(\calC)^{op}\to\Ab^\bbZ\]
+	along with a collection of natural isomorphisms
+	\[\eta^i:\tilde E^i\to \tilde E^{i+1}\circ\Sigma\]
+	subject to the following conditions:
+	\begin{itemize}
+		\item (\textit{Homotopy Invariance})If $f,g:X\to Y$ are homotopic maps (relative to their base points), then \[\tilde E^\bullet(f)=\tilde E^\bullet(g)\]
+		\item (\textit{Exactness}) For the short exact sequence $A\stackrel{\iota}{\hookrightarrow} X\to \cone(\iota)$ the following is exact:
+		\[\tilde E^\bullet(\cone(\iota))\to \tilde E^\bullet(X)\xrightarrow{\iota^\ast}\tilde E^\bullet(A)\]
+	\end{itemize}
+\end{defn}
+
+Reduced cohomology theories more succinctly capture the notions we expect when we are doing cohomology,
+but in order to do things like relative homology, one needs a little more generality.
+
+Let $\relCW$ be the category of pairs $(X,A)$ of CW complexes with inclusions $A\hookrightarrow X$ with subspace-preserving 
+morphisms.
+
+\begin{defn}[(Unreduced, Relative) Generalized Cohomology Theory]
+	An unreduced, relative generalized cohomology theory for $\relCW$ is a collection of functors 
+	\[E^\bullet:\text{Ho}(\relCW)\to\Ab^\bbZ\]
+	along with natural isomorphisms
+	\[\eta_{(X,A)}:E^\bullet(A,\varnothing)\to E^{\bullet+1}(X,A)\]
+	such that it satisfies an analogous condition for homotopy invariance that we saw in \ref{def-red-cohom} along with 
+	the following: 
+	\begin{itemize}
+		\item (\textit{Exactness}) For $(X,A)$, the following is exact:
+		\[\cdots\to E^n(X,A)\to E^n(X,\varnothing)\to E^n(A,\varnothing)\xrightarrow{\eta_{(X,A)}}E^{n+1}(X,A)\to\cdots\]
+		or, more succinctly,
+		\[\cdots\to E^n(X,A)\to E^n(X)\to E^n(A)\to E^{n+1}(X,A)\]
+		which reflects the long exact sequence in relative cohomology that you may be familiar with (see your favorite book on algebraic topology, e.g.
+		\cite[p.199]{hatcher}).
+		\item (\textit{Excision}) For $(X,A)$ and $(A,U)$ in $\relCW$ such that $\overline{U}\subseteq \text{Int}(A),$ the
+		inclusion $\iota:(X\setminus U,A\setminus U)\hookrightarrow (X,A)$ induces an isomorphism
+		\[\iota^\ast:E^\bullet(X,A)\xrightarrow{\simeq}E^\bullet(X\setminus U,A\setminus U)\]
+	\end{itemize}
+\end{defn}
+
+\subsection{Stable Homotopy Categories}
+Here we will throw down a few definitions and ideas that illustrate the idea that \textit{Eilenberg-Steenrod cohomology theories are 
+natural constructions} in that they are precisely the cohomology of the $(\infty,1)$ category of spectra.
+
+\subsection{Ancillary Definitions}
 \begin{defn}
 	A \textbf{weak pushout} of a diagram $X\xleftarrow{f}Y\xrightarrow{g}Z$ is an object $W$ and maps 
 	$f':X\to W$ and $g':Z\to W$ such that for any object $O$ and maps $\alpha:X\to O$ and $\beta:Z\to O$, 
@@ -295,7 +352,7 @@ the appropriate context.
 	required to be unique (unlike the regular pullback and pushout).
 \end{rmk}
 
-\subsection{The Statement}
+\subsection{The Theorem}
 The following result was proven by Brown and presented in \cite{brown65} and further generalized in \cite{adams71}.
 \begin{thm}[Brown-Adams]
 	A contravariant functor $F:\text{Ho}(\pTopc)\to\mathbf{Set}_\ast$ is representable precisely if 
@@ -305,10 +362,66 @@ The following result was proven by Brown and presented in \cite{brown65} and fur
 	\end{itemize}
 \end{thm}
 
-\subsection{Application}
-The following is a 
+\subsection{What This Means}
+What should we take away from Brown representability? If we accept the hypothesis that generalized cohomology 
+theories are reasonable approximations of what we are looking for in cohomology, this implies that each such 
+incarnation of a cohomology theory $H^\bullet$ admits a spectrum object $E_\bullet$ in the stable homotopy category 
+such that $H^\bullet\cong \text{Ho}(\pCW)(-,E_\bullet)$ such that the suspension isomorphism 
+$\eta:H^n(-)\to H^{n+1}(\Sigma(-))$ is induced from the structure morphisms $\sigma_n:E_n\to\Omega E_{n+1}$ of the spectrum:
+\[H^n(-)\cong \text{Ho}(\pCW)(-,E_n)\xrightarrow{(\sigma_n)}\text{Ho}(\pCW)(-,\Omega E_{n+1})\cong\text{Ho}(\pCW)(\Sigma(-),E_{n+1})\cong H^{n+1}(\sigma(-))\]
 
 \section{Brown Representability for Triangulated Categories}
+\subsection{Additional Notions}
+Along with the standard categorical definitions we saw in section one, we need one further restriction on our categories as formulated in \cite{neeman-article}:
+\begin{defn}[Compact Object]
+	Let $X\in\calC$ be an object in a triangulated category. Then $X$ is called \textbf{compact} if for every coproduct of objects in $\calC$
+	\[\Hom_\calC\left(X,\coprod_{\lambda\in\Lambda}t_\lambda\right)=\coprod_{\lambda\in\Lambda}\Hom_\calC(X,t_\lambda)\]
+\end{defn}
+\begin{rmk}
+	The idea here is that when the codomain is a product, this equality always exists. The projections give you 
+	a product of maps into the factors and the universal property of products gives you a (unique!) map into the product if you
+	have maps into each of the factors.
+
+	This does not hold in general for coproducts, however! Recall that in additive categories 
+	one has a canonical isomorphism between finite products and coproducts. Since triangulated 
+	categories are additive, this is akin to saying that $X$ is well-behaved in that the maps 
+	from $X$ still split even when the codomain is an arbitrary coproduct.
+\end{rmk}
+\begin{defn}[Compactly Generated Triangulated Category]
+	Let $\calC$ be a triangulated category. Then $\calC$ is called \textbf{compactly generated by a set $G$} of its elements 
+	if $\calC$ is closed under small coproducts and $G$ consists of compact objects of $\calC$ such that for all $X\in\calC$,
+	\[\Hom_\calC(G,X)=0\quad\Rightarrow\quad X=0.\]
+\end{defn}
+\begin{rmk}
+	Here the generators of $\calC$ are elements that have ``sufficient complexity'' to detect all nonzero elements. 
+	
+	In the more general context where $\calC$ is not necessarily additive, we can generalize this definition to a set of objects 
+	such that for every generator $E\in G$ and any $X,Y\in\calC$, if for every $f,g\in\Hom(X,Y)$ and $h\in\Hom(E,X)$ we have 
+	\[f\circ e=g\circ e\]
+	then 
+	\[f=g\]
+	and here we would say that $G$ has ``sufficient complexity'' to differentiate between any two non-identical maps.
+\end{rmk}
+\begin{ex}
+	In $\Rmod$, a set of generators is the collection of all free $R$-modules or, equivalently, the collection 
+	\[\{R^S|S\in\Set\setminus\varnothing\}\]
+	where if $S\subset M\in\Rmod$ is any nonempty subset, then $R^S$ is the product of $|S|$ copies of $R$, 
+	where a nonzero map to $M$ is the map which sends the identity in factor to a different $s\in S$.
+\end{ex}
+\begin{defn}\label{def-rep-func}
+	Let $F:\calC\to \mathbf{Set}$ be a (covariant) functor. Then $F$ is called \textbf{representable} if there exists an object $A\in \calC$ such that
+	$F$ is naturally isomorphic to $\Hom_{\calC}(-,A)$.
+\end{defn}
+\begin{defn}\label{def-cohom-func}
+	Let $R$ be a ring and let $\calT$ be a triangulated category. Then a functor $F:\calT\to\Rmod$ is called \textbf{cohomological}
+	if $F$ sends each triangle $A\to B\to C\to\Sigma A$ to an exact sequence in $\Rmod$.
+\end{defn}
+\begin{rmk}
+	This definition extends to functors from triangulated categories to any Abelian category, but due to the Freyd-Mitchell
+	embedding it suffices to use $\Rmod$ for all small examples.
+\end{rmk}
+
+
 \subsection{The Statement}
 Finally we come to the full-powered version of the Brown Representability due to Neeman in \cite{neeman-article}:
 \begin{thm}[Brown]
