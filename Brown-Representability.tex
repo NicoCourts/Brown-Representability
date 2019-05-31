@@ -44,32 +44,10 @@
 \tableofcontents
 
 \newpage
-\section{Outline of Presentation}
-The presentation will demonstrate some proper subset of the information in this document. The current sketch is the following:
-\begin{itemize}
-	\item Introduction and preliminaries
-	\begin{itemize}
-		\item Background we are assuming (categories, functors, natural transformations, and limits)
-		\item What is representability and why is it useful/important?
-		\item (Co)homological functors
-	\end{itemize}
-	\item Brown Representability in Simplicial/CW Complexes
-	\begin{itemize}
-		\item The homotopy category of pointed connected topological spaces
-		\item Categorical notions (e.g. weak pushouts)
-		\item Statement of theorem
-		\item Application
-	\end{itemize}
-	\item Brown Representability in Triangulated Categories
-	\begin{itemize}
-		\item Why are triangulated categories what we want?
-		\item Definiton and categorical background (e.g. compact generation)
-		\item Statement of theorem
-		\item Applications
-	\end{itemize}
-\end{itemize}
+The presentation itself will skip most of the first section, as this will be considered to be prerequisite background knowledge.
+Instead, we will jump right in with section 2 discussing the topic at hand.
 
-\section{Some Background}
+\section{Some Categorical Background}
 In this section we begin with some preliminary definitions and theorems that serve as the machinery for Brown representability. 
 The results that follow are fairly standard and the interested reader can find more information in \cite{neeman-book} and \cite{riehl16}.
 For the sake of time, we will omit a discussion of these facts in our lecture but include them in this document in case someone is interested in them.
@@ -112,7 +90,7 @@ collections associated to $X$ are sets.
 	they are (co)products indexed by a set.
 \end{rmk}
 
-\subsection{Functors and Representability}
+\subsection{Functors}
 \begin{defn}
   A (covariant) \textbf{functor} between two categories $\calC$ and $\calD$ is a map $F:\calC\to\calD$ that maps objects and morphisms in $\calC$ to those in $\calD$, respectively, such that 
   \begin{itemize}
@@ -246,7 +224,7 @@ condition:
   If $\calT$ is a triangulated category that is closed under small coproducts, then it is said to satisfy (\textbf{TR5}). If $\calT^{op}$ satisfies (\textbf{TR5}) (or equivalently $\calT$ is closed under small products), then we say $\calT$ satisfies (\textbf{TR5}*).
 \end{defn}
 
-\section{Brown Representability for Simpilicial Complexes}
+\section{Brown Representability in Traditional and Stable Homotopy Theory}
 One of the first incarnations of Brown representability comes from topology (as these things often do). First we need to single out 
 the appropriate context.
 
@@ -268,8 +246,59 @@ the appropriate context.
 	we see in commutative algebra.
 \end{rmk}
 \begin{rmk}
-	Since any topological space is weakly homotopy equivalent to a CW-complex, we can easily see that 
-	$\text{Ho}(\pTopc)\simeq\text{Ho}(\mathbf{CW}_\ast)$, the homotopy category of pointed CW complexes. This gives us some nice leverage for computation and tangibility.
+	Since any topological space is weakly homotopy equivalent to a CW-complex (see next remark), we can easily see that 
+	$\text{Ho}(\pTopc)\simeq\text{Ho}(\mathbf{\pCW})$, the homotopy category of pointed CW complexes. This gives us some nice leverage for computation and tangibility.
+\end{rmk}
+\begin{rmk}
+	There is an iterative, constructive argument that leads to this (see e.g. \cite{hatcher}), but it ends up that 
+	a cleaner way to see this is by considering the Dold-Kan correspondence between simplicial 
+	abelian groups and simplicial complexes of connective cochains of abelian groups. Connectivity means that the homology is concentrated in positive degree. 
+	Then constructing the so-called Eilenberg-Maclane spaces $K(G,n)$ amount to writing down a cochain complex and applying a functor.
+\end{rmk}
+
+
+
+\subsection{Ancillary Definitions}
+\begin{defn}\label{def-weak-pushouts}
+	A \textbf{weak pushout} in $\pCW$ of a diagram $X\xleftarrow{f}Y\xrightarrow{g}Z$ is an object $W$ and maps 
+	$f':X\to W$ and $g':Z\to W$ such that for any object $O$ and maps $\alpha:X\to O$ and $\beta:Z\to O$, 
+	such that $\alpha\circ f=\beta\circ g$, there exists a map $\gamma:W\to O$ such that the following diagram commutes:
+	\begin{center}
+		\begin{tikzcd}
+			Y\ar[r,"f"]\ar[d,"g"] & X\ar[d,"f'"]\ar[ddr,"\alpha",bend left] &\\
+			Z\ar[r,"g'"]\ar[rrd,"\beta",bend right] & W\ar[dr,dashed,"\gamma"] & \\
+			& & O 
+		\end{tikzcd}
+	\end{center}
+
+	A \textbf{weak pullback} is defined dually.
+\end{defn}
+\begin{rmk}
+	The ``weakness'' referred to in this definition is due to the fact that the map $\gamma$ exists, but is not 
+	required to be unique (unlike the regular pullback and pushout).
+\end{rmk}
+
+\begin{defn}\label{def-rep-func}
+	Let $F:\calC\to \mathbf{Set}$ be a (covariant) functor. Then $F$ is called \textbf{representable} if there exists an object $A\in \calC$ such that
+	$F$ is naturally isomorphic to $\Hom_{\calC}(-,A)$.
+\end{defn}
+
+\subsection{The Theorem}
+The following result was proven by Brown and presented in \cite{brown65} and further generalized in \cite{adams71}.
+\begin{thm}[Brown `65]\label{thm-brown}
+	A contravariant functor $F:\text{Ho}(\pTopc)\simeq\text{Ho}(\pCW)\to\mathbf{Set}_\ast$ is representable precisely if 
+	\begin{itemize}
+		\item $F$ takes coproducts to products; and 
+		\item $F$ takes weak pushouts to weak pullbacks.
+	\end{itemize}
+\end{thm}
+\begin{defn}
+	A \textbf{Brown functor} is a functor $F:\text{Ho}(\pCW)^{op}\to\Set$ that takes coproducts to products and weak pushouts to weak pullbacks.
+\end{defn}
+\begin{rmk}
+	We will delay the proof of this theorem to the end, where we prove it in the more general setting. It is a simple application 
+	once one realizes that $\text{Ho}(\pCW)$ is a triangulated category and that a Brown functor (i.e. one that 
+	satisfies the hypotheses above) is a cohomological functor (def~\ref{def-hom-func}).
 \end{rmk}
 
 \subsection{Generalized (Eilenberg-Steenrod) Cohomology Theories}
@@ -288,34 +317,20 @@ Notice that these theories notably do \textit{not} include nonabelian cohomology
 	of $G$ and the $(i+k)^{th}$ graded piece of $H$ for any $G,H\in\Ab^{\bbZ}$. If $\varphi:G\to H$ is any degree zero map and $h\in H^k$ is 
 	any degree $k$ element in $H$, then an example of such a map is $\varphi'(g)=h\cdot \varphi(g).$
 \end{rmk}
-\begin{defn}[(Reduced) Generalized Cohomology Theory]\label{def-red-cohom}
-	A \textbf{reduced generalized cohomology theory} on $\calC=\pCW$ is 
-	a family of functors:
-	\[\tilde E^\bullet:\text{Ho}(\calC)^{op}\to\Ab^\bbZ\]
-	along with a collection of natural isomorphisms
-	\[\eta^i:\tilde E^i\to \tilde E^{i+1}\circ\Sigma\]
-	subject to the following conditions:
-	\begin{itemize}
-		\item (\textit{Homotopy Invariance})If $f,g:X\to Y$ are homotopic maps (relative to their base points), then \[\tilde E^\bullet(f)=\tilde E^\bullet(g)\]
-		\item (\textit{Exactness}) For the short exact sequence $A\stackrel{\iota}{\hookrightarrow} X\to \cone(\iota)$ the following is exact:
-		\[\tilde E^\bullet(\cone(\iota))\to \tilde E^\bullet(X)\xrightarrow{\iota^\ast}\tilde E^\bullet(A)\]
-	\end{itemize}
-\end{defn}
 
-Reduced cohomology theories more succinctly capture the notions we expect when we are doing cohomology,
-but in order to do things like relative homology, one needs a little more generality.
-
-Let $\relCW$ be the category of pairs $(X,A)$ of CW complexes with inclusions $A\hookrightarrow X$ with subspace-preserving 
+\begin{defn} 
+	$\relCW$ is the category of pairs $(X,A)$ of CW complexes with inclusions $A\hookrightarrow X$ with subspace-preserving 
 morphisms.
+\end{defn}
 
 \begin{defn}[(Unreduced, Relative) Generalized Cohomology Theory]
 	An unreduced, relative generalized cohomology theory for $\relCW$ is a collection of functors 
 	\[E^\bullet:\text{Ho}(\relCW)\to\Ab^\bbZ\]
 	along with natural isomorphisms
 	\[\eta_{(X,A)}:E^\bullet(A,\varnothing)\to E^{\bullet+1}(X,A)\]
-	such that it satisfies an analogous condition for homotopy invariance that we saw in \ref{def-red-cohom} along with 
-	the following: 
+	such that it satisfies the following: 
 	\begin{itemize}
+		\item (\textit{Homotopy Invariance}) If $f,g\in\Hom((X,A),(Y,B))$ and $f\sim_Ag$ (that is, $f$ is homotopic to )
 		\item (\textit{Exactness}) For $(X,A)$, the following is exact:
 		\[\cdots\to E^n(X,A)\to E^n(X,\varnothing)\to E^n(A,\varnothing)\xrightarrow{\eta_{(X,A)}}E^{n+1}(X,A)\to\cdots\]
 		or, more succinctly,
@@ -327,48 +342,98 @@ morphisms.
 		\[\iota^\ast:E^\bullet(X,A)\xrightarrow{\simeq}E^\bullet(X\setminus U,A\setminus U)\]
 	\end{itemize}
 \end{defn}
+\begin{prop}
+	Generalized cohomology theories are Brown functors.
+\end{prop}
+\begin{rmk}
+	Notice that technically the definition of a Brown functor is a map from $\pCW$, which embeds as a proper subcategory osf $\relCW$. However 
+	the homotopy category is still going to be an $(\infty,1)$-category, so the more general version of Brown representability applies.
+\end{rmk}
 
-\subsection{Stable Homotopy Categories}
-Here we will throw down a few definitions and ideas that illustrate the idea that \textit{Eilenberg-Steenrod cohomology theories are 
-natural constructions} in that they are precisely the cohomology of the $(\infty,1)$ category of spectra.
+\subsection{Stable Homotopy Theory}
+The point of this next section is to generalize further to allow us to place this in a broader context in which 
+computing the cohomology of topological spaces is just a special case.
 
-\subsection{Ancillary Definitions}
+Many of the definitions and results here are due to \cite{lurie}. It isn't particularly illuminating (and perhaps out of scope for this paper)
+to look at formal definitions in some cases, so I will rely on intuition.
+
+\begin{rmk}
+	A 2-category is a weakening of a category in the following way: a 2-category $\calC$ is a category that is weakly enriched over $\mathbf{Cat}$.
+	That is, the $\Hom$ objects are themselves categories and the usual identity and associativity axioms are replaced 
+	with weaker identity and associativity ``up to 2-isomorphism.''
+
+	Then we can define iteratively an $n$-category as a category that is weakly enriched over an $(n-1)$-category. Then eschewing formalities,
+	we can think of an $\infty$-category as the limit of this iterative process.
+\end{rmk}
+
 \begin{defn}
-	A \textbf{weak pushout} of a diagram $X\xleftarrow{f}Y\xrightarrow{g}Z$ is an object $W$ and maps 
-	$f':X\to W$ and $g':Z\to W$ such that for any object $O$ and maps $\alpha:X\to O$ and $\beta:Z\to O$, 
-	such that $\alpha\circ f=\beta\circ g$, there exists a map $\gamma:W\to O$ such that the following diagram commutes:
+	An $(\infty,1)$-category is an $\infty$-category in which all $k$-morphisms for $k\ge 2$ are invertible.
+\end{defn}
+\begin{prop}
+	$\text{Ho}(\pCW)$ is an $(\infty,1)$-category.
+\end{prop}
+\begin{rmk}
+	The idea here is that $(\infty,1)$-categories are the proper context to do work involving (higher) homotopies. They 
+	capture the notion of maps between maps. This introduces the notion of two maps being ``not identical, but homotopic''. 
+	
+	We want to say that (e.g.) if the composition $f\circ g$ of two loops is 
+	contractible, that the composition is essentially (up to homotopy) the constant map. The standard category of topological spaces 
+	and continuous maps simply doesn't allow for this. 
+\end{rmk}
+
+\begin{defn}
+	Let $\calC$ be an $(\infty,1)$-category with homotopy (or weak) pullbacks (see defn~\ref{def-weak-pushouts}). Then the \textbf{loop space object}
+	for $X\in\calC$ is the homotopy pullback of the diagram $\ast\to X\leftarrow\ast$:
 	\begin{center}
 		\begin{tikzcd}
-			Y\ar[r,"f"]\ar[d,"g"] & X\ar[d,"f'"]\ar[ddr,"\alpha",bend left] &\\
-			Z\ar[r,"g'"]\ar[rrd,"\beta",bend right] & W\ar[dr,dashed,"\gamma"] & \\
-			& & O 
+			\Omega X\ar[r]\ar[d] & \ast\ar[d]\\
+			\ast\ar[r] & X
 		\end{tikzcd}
 	\end{center}
 
-	A \textbf{weak pullback} is defined dually.
+	Dually, if $\calC$ has homotopy pushouts, we can define a \textbf{suspension object} for $X$, $\Sigma X$, to be the homotopy pushout of 
+	$\ast\leftarrow X\to \ast.$
+\end{defn}
+
+Finally we get the thing we're looking for: the context for performing stable homotopy theory.
+\begin{defn}
+	A \textbf{stable $(\infty,1)$-category} is an $(\infty,1)$-category that is stable under the looping and suspension operations. In particular, 
+	we get that $\Omega:\calC\to\calC$ is an equivalence with inverse $\Sigma.$
+\end{defn}
+\begin{defn}
+	A \textbf{sequential spectrum} (in a category where we have suspensions) is a sequence 
+	\[X_0\to X_1\to\cdots\]
+	along with structural morphisms $\sigma:\Sigma X_n\to X_{n+1}$.
 \end{defn}
 \begin{rmk}
-	The ``weakness'' referred to in this definition is due to the fact that the map $\gamma$ exists, but is not 
-	required to be unique (unlike the regular pullback and pushout).
+	In general one can talk about spectrum objects in an $(\infty,1)$-category, but this is more tangible and works for $\pCW$.
 \end{rmk}
-
-\subsection{The Theorem}
-The following result was proven by Brown and presented in \cite{brown65} and further generalized in \cite{adams71}.
-\begin{thm}[Brown-Adams]
-	A contravariant functor $F:\text{Ho}(\pTopc)\to\mathbf{Set}_\ast$ is representable precisely if 
-	\begin{itemize}
-		\item $F$ takes coproducts to products; and 
-		\item $F$ takes weak pushouts to weak pullbacks.
-	\end{itemize}
-\end{thm}
 
 \subsection{What This Means}
 What should we take away from Brown representability? If we accept the hypothesis that generalized cohomology 
 theories are reasonable approximations of what we are looking for in cohomology, this implies that each such 
-incarnation of a cohomology theory $H^\bullet$ admits a spectrum object $E_\bullet$ in the stable homotopy category 
-such that $H^\bullet\cong \text{Ho}(\pCW)(-,E_\bullet)$ such that the suspension isomorphism 
-$\eta:H^n(-)\to H^{n+1}(\Sigma(-))$ is induced from the structure morphisms $\sigma_n:E_n\to\Omega E_{n+1}$ of the spectrum:
-\[H^n(-)\cong \text{Ho}(\pCW)(-,E_n)\xrightarrow{(\sigma_n)}\text{Ho}(\pCW)(-,\Omega E_{n+1})\cong\text{Ho}(\pCW)(\Sigma(-),E_{n+1})\cong H^{n+1}(\sigma(-))\]
+incarnation of a cohomology theory $\tilde E^\bullet$ admits a spectrum object $E_\bullet$ in the stable homotopy category 
+such that (degree-wise) $\tilde E^\bullet\cong \text{Ho}(\pCW)(-,E_\bullet)$ such that the suspension isomorphism 
+$\eta:\tilde E^n(-)\to \tilde E^{n+1}(\Sigma(-))$ is induced from the structure morphisms $\sigma_n:E_n\to\Omega E_{n+1}$ of the spectrum:
+\begin{align*}
+	\tilde E^n(-)\cong \text{Ho}(\pCW)(-,E_n)\xrightarrow{(\sigma_n)}&\text{Ho}(\pCW)(-,\Omega E_{n+1})\\
+	&\cong\text{Ho}(\pCW)(\Sigma(-),E_{n+1})\cong \tilde E^{n+1}(\Sigma(-))
+\end{align*}
+Because of this, we tend to think of 
+\[\tilde E^\bullet(X)=H(X,E^\bullet)\]
+where $E^\bullet$ is the spectrum object representing $\tilde E^\bullet$. In other words, \textit{every generalized cohomology theory is just 
+cohomology with coefficients in some spectrum object.}
+\begin{rmk}
+	Notice that there is actually something a little funny here, since $E^\bullet$ is a spectrum object, and not an element of $\text{Ho}(\pCW)$ proper.
+	So saying that $E^\bullet$ is a representing object in the traditional sense is perhaps misguided although clearly the fact that we get a 
+	spectrum with structure morphisms inducing the suspension isomorphisms is nothing to scoff at.
+\end{rmk}
+
+\subsection{For (ordinary) cohomology}
+If we restrict our attention further to ordinary cohomology theories, that is, $E^\bullet$ such that $E^i(S^0)=0$ whenever $i\ne 0$,
+we get an exceptionally nice result. Generally we write $E^\bullet=H^\bullet(-,A)$ where $A$ is an abelian group. 
+The representing spectrum object for $E^\bullet$ is the so-called \textbf{Eilenberg-Maclane spectrum} $HA$:
+\[HA_n=K(A,n).\]
 
 \section{Brown Representability for Triangulated Categories}
 \subsection{Additional Notions}
@@ -385,7 +450,7 @@ Along with the standard categorical definitions we saw in section one, we need o
 	This does not hold in general for coproducts, however! Recall that in additive categories 
 	one has a canonical isomorphism between finite products and coproducts. Since triangulated 
 	categories are additive, this is akin to saying that $X$ is well-behaved in that the maps 
-	from $X$ still split even when the codomain is an arbitrary coproduct.
+	from $X$ still split even when the codomain is an arbitrarily large coproduct.
 \end{rmk}
 \begin{defn}[Compactly Generated Triangulated Category]
 	Let $\calC$ be a triangulated category. Then $\calC$ is called \textbf{compactly generated by a set $G$} of its elements 
@@ -408,30 +473,124 @@ Along with the standard categorical definitions we saw in section one, we need o
 	where if $S\subset M\in\Rmod$ is any nonempty subset, then $R^S$ is the product of $|S|$ copies of $R$, 
 	where a nonzero map to $M$ is the map which sends the identity in factor to a different $s\in S$.
 \end{ex}
-\begin{defn}\label{def-rep-func}
-	Let $F:\calC\to \mathbf{Set}$ be a (covariant) functor. Then $F$ is called \textbf{representable} if there exists an object $A\in \calC$ such that
-	$F$ is naturally isomorphic to $\Hom_{\calC}(-,A)$.
-\end{defn}
-\begin{defn}\label{def-cohom-func}
-	Let $R$ be a ring and let $\calT$ be a triangulated category. Then a functor $F:\calT\to\Rmod$ is called \textbf{cohomological}
+\begin{defn}\label{def-hom-func}
+	Let $R$ be a ring and let $\calT$ be a triangulated category. Then a functor $F:\calT\to\Rmod$ is called \textbf{homological}
 	if $F$ sends each triangle $A\to B\to C\to\Sigma A$ to an exact sequence in $\Rmod$.
 \end{defn}
 \begin{rmk}
 	This definition extends to functors from triangulated categories to any Abelian category, but due to the Freyd-Mitchell
 	embedding it suffices to use $\Rmod$ for all small examples.
 \end{rmk}
+\begin{defn}
+	In a triangulated category with (small) coproducts, the \textbf{homotopy colimit} of a sequence $X_0\to X_1\to\cdots$, denoted $\operatorname{hocolim}_{\rightarrow}X_i$,
+	is the object fitting into the triangle 
+	\[\coprod X_i\xrightarrow{\text{shift}}\coprod X_i\to \operatorname{hocolim}_\rightarrow X_i \to\Sigma\prod X_i\]
+	where the shift map above is the one following the maps in the given sequence.
+\end{defn}
 
 
 \subsection{The Statement}
 Finally we come to the full-powered version of the Brown Representability due to Neeman in \cite{neeman-article}:
-\begin{thm}[Brown]
+\begin{thm}[Brown-Neeman]
 	Let $\calT$ be a compactly generated triangulated category. For a functor $H:\calT^{op}\to\Ab$, the following 
 	are equivalent:
 	\begin{itemize}
-		\item The functor $H$ is cohomological (def~\ref{def-cohom-func}) and preserves small coproducts.
+		\item The functor $H$ is homological (def~\ref{def-hom-func}) and preserves small coproducts.
 		\item $H$ is representable (def~\ref{def-rep-func}).
 	\end{itemize}
 \end{thm}
+\begin{prf}
+	Begin by letting $T$ be a set of compact generators for $\calT.$ Then define 
+	\[U_0=\bigcup_{t\in T}H(t)=\{(\alpha,t)\}\]
+	where the right equality is a matter of notation (remembering the $t$ from which $\alpha$ came).
+
+	Then set $X_0=\coprod_{(\alpha,t)\in U_0}t$, so (by pulling out coproducts):
+	\[H(X_0)=\prod_{(\alpha,t)\in U_0}H(t).\]
+	
+	Let $\alpha_0\in H(X_0)$ be the element which has $\alpha$ in the coordinate corresponding to the $(\alpha,t)$ spot
+	(for all $(\alpha,t)\in U_0$). Notice that if $\iota:t\hookrightarrow X_0$ is inclusion of $t$ into the position corresponding to $(\alpha,t)$,
+	then $H(\iota)(\alpha_0)=\alpha.$
+
+	Now by Yoneda lemma, such an element in $H(X_0)$ corresponds to a natural transformation $\eta_0:\Hom(-,X_0)\to H$. The above argument 
+	shows that the component morphisms $\eta^0(t):\Hom(t,X_0)\to H(t)$ are surjective maps.
+
+	\brk
+
+	For the induction step, assume that we have $X_i\in\calT$ and $\eta^i:\Hom(-,X_i)\to H$ for $i\ge 0$.
+	Define 
+	\[U_{i+1}=\bigcup_{t\in T}\ker\eta^i_t\]
+	where each pair $(f,t)$ has the property that $\eta^i_t(f)=0.$
+
+	Let $K_{i+1}=\coprod_{(f,t)}t$ and $F:K_{i+1}\to X_i$ be the map such that the restriction to the $(f,t)^{th}$
+	summand in $K_{i+1}$ is $f$. Using the mapping cone axiom, complete $F$ to a triangle:
+	\[K_{i+1}\xrightarrow{F}X_i\to X_{i+1}\to\Sigma K_{i+1}\]
+	and define $X_{i+1}$ to be the element fitting into this extension.
+
+	Applying Yoneda, extract $\alpha_i$ from $\eta^i$. Then consider that $H(F):H(X_i)\to H(K_{i+1})$ is the product of maps 
+	with $H(f)$ in the $(f,t)^{th}$ spot. But (by the details of the Yoneda equivalence),
+	\[\eta^i(f)=H(f)(\alpha_i)\]
+	for all $f\in Hom(t,X_i)$. But then since the $f$ we chose in our indexing set $U_{i+1}$ were precisely 
+	those such that $\eta^i(f)=0$, we can conclude that $H(f)(\alpha_i)=0$, and so $H(F)(\alpha_i)=0$.
+
+	Now using that $H$ is a cohomological functor, we get an exact sequence 
+	\[H(X_{i+1})\xrightarrow{k} H(X_i)\xrightarrow{H(F)} H(K_{i+1})\]
+	and since $\alpha_i$ goes to zero on the right, there is an $\alpha_{i+1}\in H(X_{i+1})$ such that 
+	it is mapped to $\alpha_i$ under $k$.
+
+	Again leveraging Yoneda, let $\alpha_{i+1}$ correspond to $\eta^{i+1}$. This gives us a commutative diagram 
+	\begin{center}
+		\begin{tikzcd}
+			\Hom(-,X_i)\ar[dr,"\eta^i"]\ar[d,"k",swap] & \\
+			\Hom(-,X_{i+1})\ar[r,swap,"\eta^{i+1}"] & H
+		\end{tikzcd}
+	\end{center}
+	This completes the induction step, giving us our $X_{i+1}$ and $\eta^{i+1}$.
+
+	\brk
+
+	From here the statement follows once we realize these two facts: If we set $X=\operatorname{hocolim}_{\to}X_i$,
+	\begin{itemize}
+		\item There is a natural transformation $\xi:\Hom(-,X)\to H$ such that $\eta^i$ factors through $\xi$.
+		\item $\xi$ is a natural isomorphism.
+	\end{itemize}
+\end{prf}
+\begin{rmk}
+	The rest of the details here are mostly technical and not particularly enlightening, since we have the gist 
+	of what we wanted: $X$, the homotopy colimit of these objects we constructed. This is our representing object.
+\end{rmk}
+
+\subsection{Brown Representability and Adjointness}
+\begin{defn}
+	A \textbf{triangulated functor} between two triangulated categories $\calT$ and $\calS$ is an additive functor that 
+	commutes with rotation and takes distinguished triangles to distinguished triangles.
+\end{defn}
+The last (and sometimes more useful) statement to come from Brown representability involves adjointness:
+\begin{cor}
+	Let $F:\calT\to\calS$ be a triangulated functor from $\calT$, a triangulated category, to $\calS$, a compactly-generated triangulated category, such that $F$ respects coproducts. 
+	Then $F$ has a right adjoint $G$.
+\end{cor}
+\begin{rmk}
+	The idea for the proof here is to take a set $T$ of compact generators for $\calS$ and for each to construct $\Phi_t:\calS\to\Set$:
+	\[\Phi_t(s)=\Hom_\calT(F(s),t).\]
+	One can show that $\Phi_t$ is a cohomological functor for all $t$ and further that it takes coproducts to products, so Brown applies.
+	Thus there is an object $G(t)$ for each $t$ such that 
+	\[\Hom_\calT(F(s),t)\cong\Hom_\calS(s,G(t))\]
+	and it can be shown that this extends to a functor (which is then clearly adjoint to $F$).
+\end{rmk}
+
+\subsection{Application}
+The primary application that Neeman cites in his paper is that of Grothendieck duality:
+if $f:X\to Y$ is a proper morphism of Noetherian schemes of finite dimension, the right derived
+functor $Rf_\ast$ of its direct image functor has a right adjoint -- generally denoted $f^!$
+
+In other words, there is a natural isomorphism 
+\[Rf_\ast \calR\Hom_X(x,f^!y)\cong\calR\Hom_Y(Rf_\ast x,y)\]
+where $x$ is a quasi-coherent sheaf over $X$ and $y$ is a quasi-coherent sheaf over $Y$. Notice this isomorphism 
+is in the bounded-below derived category of quasicoherent sheaves over $Y$: $\Dpos(qc/Y)$.
+
+If you can prove that $\Dpos(qc/X)$ is triangulated and that $Rf_\ast$ is suitably nice, this gives you 
+the adjoint without having to do the explicit construction carried out by Grothendieck when he originally 
+established the existence of $f^!$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Bibliography %%%%%%%%%%%%%
